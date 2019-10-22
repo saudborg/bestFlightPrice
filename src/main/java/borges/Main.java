@@ -14,19 +14,20 @@ import java.util.*;
 
 public class Main {
 
-    public static final String KEY = "";
+    public static final String KEY = "RmRxpyRk9VmshEWEI9wedVZFqjBUp1DsO27jsnXJcMb8Rw15NI";
 
     public static void main(String[] args) throws UnirestException, ParseException {
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
         String from = "Berlin";
-        String when = "2019-12-20";
-        int gap = 10;
+        String when = "2019-11-01";
+        int gap = 20;
         String placeIdFrom = getPlaceId(from);
 
 
-        List<String> listTo = Arrays.asList("Hanoi", "Bankok","Philippines");
+        List<String> listTo = Arrays.asList("Sao%20Paulo");
+        //List<String> listTo = Arrays.asList("Hanoi", "Bankok","Philippines");
 
         Double min = Double.MAX_VALUE;
         JSONObject best = null;
@@ -62,6 +63,9 @@ public class Main {
                 }
             } else {
                 best = currentBest;
+                bestFromCode = placeIdFrom;
+                bestToCode = placeIdTo;
+                bestDate = ((JSONObject) best.get("OutboundLeg")).get("DepartureDate").toString();
             }
         }
 
@@ -100,9 +104,9 @@ public class Main {
     }
 
     private static JSONArray getQuotes(String when, String placeIdFrom, String placeIdTo) throws UnirestException {
-        HttpResponse<JsonNode> response = Unirest.get("https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/browseroutes/v1.0/US/USD/en-US/"+ placeIdFrom + "/" + placeIdTo + "/"+ when )
+        HttpResponse<JsonNode> response = Unirest.get("https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/browseroutes/v1.0/US/EUR/en-US/"+ placeIdFrom + "/" + placeIdTo + "/"+ when )
                 .header("x-rapidapi-host", "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com")
-                .header("x-rapidapi-key", "RmRxpyRk9VmshEWEI9wedVZFqjBUp1DsO27jsnXJcMb8Rw15NI")
+                .header("x-rapidapi-key", KEY)
                 .asJson();
         return (JSONArray) response.getBody().getObject().get("Quotes");
     }
@@ -111,7 +115,7 @@ public class Main {
         HttpResponse<JsonNode> getRequest = Unirest
                 .get("https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/autosuggest/v1.0/UK/EUR/en-GB/?query="+ from)
                 .header("x-rapidapi-host", "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com")
-                .header("x-rapidapi-key", "RmRxpyRk9VmshEWEI9wedVZFqjBUp1DsO27jsnXJcMb8Rw15NI")
+                .header("x-rapidapi-key", KEY)
                 .asJson();
 
         System.out.println(getRequest);
